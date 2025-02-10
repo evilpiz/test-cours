@@ -1,0 +1,310 @@
+
+Sommaire
+1	INTRODUCTION	4
+1.1	Périmètre	4
+1.2	Outils de gestion interne	4
+1.3	Sécurité réseau globale	4
+1.3.1	Segmentation par VLAN	4
+1.3.2	Protection périmétrique des flux	4
+1.3.3	Redondance des accès WAN	4
+1.3.4	Politique d’architecture	4
+1.3.5	Protection des flux d’administration	5
+1.3.6	Protection des ports Ethernet	5
+1.3.7	Accès externe des prestataires	5
+1.3.8	Chiffrement des flux	5
+1.4	Sécurité physique globale	5
+1.4.1	Accès sécurisé physique	5
+1.4.2	Sécurité des documents papiers	5
+1.4.3	Télésurveillance	6
+1.4.4	Accès d’administration externe	6
+1.5	Hyperviseurs et stockage partagés	6
+1.6	Traçabilité	6
+2	POLITIQUES DE SÉCURITÉ	7
+2.1	Politiques d’échanges sécurisés	7
+2.2	Domaine et stations de travail	7
+2.2.1	Annuaire Active Directory	7
+2.2.2	Postes de travail	7
+2.2.2.1	Sécurisation des postes de travail	7
+2.2.2.2	Protection et contrôle	8
+2.3	Fichiers collaborateurs	8
+2.4	Messagerie	8
+2.5	Copieurs	9
+2.6	Vulnérabilité et mise à jour	9
+2.6.1	Poste de travail :	9
+2.6.2	Serveurs et éléments réseaux :	9
+2.7	Supervision	9
+2.8	Accès Wifi	10
+2.9	Téléphonie	10
+2.9.1	Téléphonie interne	10
+2.9.2	Smartphone	10
+2.10	Site Web	11
+2.11	Politique de sauvegarde	11
+2.12	Gestion des mots de passe	12
+2.13	Ferme RDS	12
+2.14	Bastion interne et externe	12
+3	FORMATIONS	13
+3.1	Collaborateurs	13
+3.2	Administrateurs	13
+4	DOCUMENTATION	14
+4.1	Présence documentaire	14
+5	ANNEXE	15
+5.1	Schéma physique illustrant le DAT	15
+5.2	Liste des vlan	16
+
+1	Introduction
+1.1	Périmètre
+L’entreprise Truck Norris est une société dont le métier est le transport de marchandise et la formation.
+La sécurisation de l’infrastructure est l’entièreté de l’infrastructure de l’entreprise.
+1.2	Outils de gestion interne
+La société possède les outils suivants :
+-	Outil ITAM avec application de stratégies dédiées
+-	Outil CMDB
+-	Outil d’Asset management
+1.3	Sécurité réseau globale
+1.3.1	Segmentation par VLAN
+Il doit être systémique de segmenter et de limiter les domaines de diffusions par l’utilisation de VLAN les différents systèmes de l’infrastructure.
+1.3.2	Protection périmétrique des flux
+La politique de l’ANSSI est appliquée avec la présence d’un stack de pare-feu d’une marque A pour le rôle edge en flux nord/sud, et un autre stack de pare-feu d’une marque B (donc différence) pour les flux ouest/est.
+L’application d’une politique périmétrique limite l’impact interne d’une attaque externe, la DMZ publique étant au milieu.
+1.3.3	Redondance des accès WAN
+Afin de sécuriser la disponibilité des activités de l’entreprise il y a deux fournisseurs d’accès internet différents avec une borne 5G.
+Les trois accès doivent être de technologie différentes (FTTH, ADSL,5G) afin de garantir la disponibilité et de se prémunir des risques.
+1.3.4	Politique d’architecture
+Nous appliquons un suivi systématique d’une politique de tiering, de plus nous séparons les zones DNS des postes de collaborateurs des éléments de production.
+1.3.5	Protection des flux d’administration
+Un VLAN administrateur est dédié aux postes de travail eux même dédié aux actes d’administrations, ces éléments peuvent accéder aux VLAN de management pour la gestion de l’infrastructure.
+Les postes sans privilèges ne peuvent faire aucune action d’administration.
+1.3.6	Protection des ports Ethernet
+Les ports des éléments réseaux n’étant pas verrouillés dans les salles informatiques doivent être désactivés ou sous protocole 802.1x pour ne pas les exposer à des accès non autorisés.
+1.3.7	Accès externe des prestataires
+Les prestataires de la société Truck Norris dans leur mission d’infogérance doivent obligatoirement passé par le bastion Systancia (ce dernier prend en charge la rupture protocolaire) en place afin de garantir la traçabilité et l’accès légitimes aux ressources.
+1.3.8	Chiffrement des flux
+Les communications inter-réseaux doivent être chiffrés, que ce soit en interne ou en externe, utilisant des protocoles reconnus pour leur sécurité type SFTP, LDAPS, SSH.
+
+1.4	Sécurité physique globale
+1.4.1	Accès sécurisé physique
+Les accès physiques aux salles informatiques et aux bâtiments de l’entreprise se font par badges nominatifs. 
+Les visiteurs doivent impérativement être accompagnés et signer leur passage sur un document dédié impliquant leur identité et heure de passage ainsi que leurs signatures.
+1.4.2	Sécurité des documents papiers
+La politique des bureaux propres s’impose à tous les collaborateurs, en cas d’absence à son poste de travail, toute documentation papier ou données écrite doit être sécurisée dans un tiroir fermé à clé.
+L’ordinateur pour travailler doit également être mis sous clé lors du départ de l’employé de son poste hors de ses horaires de travail.
+Les données sur papier lors de leurs destructions doivent être éliminé par un système de broyage empêchant la lecture des documents en cas de récupération dans les déchets.
+1.4.3	Télésurveillance
+L’intégration de la télésurveillance se fait dans un VLAN dédié et doit utiliser un stockage dédié en suivant les réglementations légales de rétention.
+La responsabilité est transférée au prestataire de service des systèmes de télésurveillance.
+1.4.4	Accès d’administration externe
+L’infrastructure est gérable depuis l’extérieur par des moyens de type OOB (Out-Of-Band) ayant leur propre mini-infrastructure séparée.
+1.5	Hyperviseurs et stockage partagés
+Les hyperviseurs de l’infrastructure doivent être clusterisés et partager un stockage en commun, pour garantir la sécurité de ces éléments il faut :
+-	Séparer physiquement les deux hyperviseurs
+-	Permettre la scalabilité du cluster afin de s’adapter aux besoins métiers et aux nouveaux risques
+-	Le stockage partagé doit être extensible et clustérisé.
+L’administration des hyperviseurs se fait uniquement par l’intermédiaire d’un bastion interne dans un objectif de traçabilité et d’imputabilité.
+1.6	Traçabilité
+Pour des raisons de conformité légale, un puis de log est intégré à l’infrastructure. Il ne s’agit pas d’un SIEM puisque la supervision est intégrée séparément.
+Ce dernier est dans un VLAN dédié et sauvegardé à minima une fois par jour.
+
+La récupération et l’analyse des logs doit privilégier les éléments critiques suivant la matrice de risques de l’entreprise, et privilégier les logs des applications métiers et des actifs réseaux ainsi que les actions humaines comme les comptes à accès privilégiés.
+
+Le principe de non-répudiation est fondamental dans notre infrastructure au travers des politiques précédemment définies : chaque action réalisée doit pouvoir être attribuée de façon irréfutable à son auteur.
+
+
+
+2	Politiques de sécurité
+2.1	Politiques d’échanges sécurisés
+Les échanges des données confidentielles et critiques doivent se faire au travers de moyens d’échange sécurisés avec des clés de chiffrement asymétriques, soit dans les fonctions intégrés aux mails, soit au travers d’une fonctionnalité du gestionnaire de mot de passe.
+Les protocoles doivent être aux normes de l’ANSSI notamment sur le chiffrement RSA.
+2.2	Domaine et stations de travail
+2.2.1	Annuaire Active Directory
+Pour la sécurité du domaine, plusieurs politiques sont à appliquer :
+-	Suivi de la politique d’AGDLP en appliquant les permissions sur les rôles ne donnant le strict nécessaire en fonction des besoins
+-	Suivi de la politique de tiering
+-	Diffusion des services LDAPS et DNS par des RODC auprès des stations de travail.
+-	Politique de durcissement AD
+-	Politique de compte nominatif, le seul compte non-nominatif devant exister est un compte brise-glace en cas d’urgence.
+-	Rotation des mots de passe administrateurs locaux automatisée
+-	Gestion des certificats de domaine interne
+-	Politique de revue des accès mensuelles
+Au vu de l’existant précédent, il est important d’avoir les systèmes à jour encore sous support de l’éditeur.
+Au niveau de l’intégration dans l’infrastructure, l’ensemble est dans un VLAN dédié et les communications sont en LDAPS grâce à l’autorité de certificat de domaine.
+Des comptes d’administrations sont les seuls à pouvoir administrer le domaine AD, ces derniers sont obligatoirement soumis à une politique de MFA.
+2.2.2	Postes de travail
+2.2.2.1	Sécurisation des postes de travail
+L'architecture propose une approche "Zéro Trust" pour l'intégration des postes de travail au système d'information. Cette stratégie s'appuie sur un processus d'enrôlement sécurisé et une ségrégation stricte des accès au domaine. Pour le télétravail, nous avons opté pour une solution moderne d'accès conditionnel qui évalue en continu l'état de sécurité des postes et la légitimité des flux comme le ZTNA.
+Est mise en place un outil de sécurité de type DLP sur les postes de travails.
+Des filtres de confidentialités sont disponibles en cas de nomadisme.
+2.2.2.2	Protection et contrôle
+La sécurité des postes repose sur une approche défensive multicouche :
+-	Protection avancée contre les menaces avec surveillance des comportements
+-	Prévention des fuites de données sensibles
+-	Gestion centralisée et automatisée des mises à jour
+-	Contrôle strict des applications et des privilèges
+-	Contrôle et sécurisations des périphériques USB
+En conformité avec les normes de sécurité internationales et les recommandations de Truck Norris, nous mettons en œuvre :
+-	Un chiffrement systématique des données
+-	Une politique de verrouillage automatique des sessions
+-	Une surveillance et une traçabilité complète des flux réseau
+-	Une gestion rigoureuse des accès aux ressources
+2.3	Fichiers collaborateurs
+Les fichiers des collaborateurs ne sont pas stockés sur les stations de travail, au contraire ils sont centralisés sur un serveur chiffré et redondé, ce dernier est sauvegarde et permet de profiter de fonctionnalités de versionning grâce au shadow copy (VSS).
+
+L’accès aux fichiers suit un principe de permissions AGDLP donc basé sur le rôle du collaborateur.
+Des solutions de réplications sont en place et les outils de traçabilités surveillent les modifications des fichiers et leurs auteurs.
+Ainsi le stockage n’est pas le même en fonction des rôles de chacun.
+2.4	Messagerie
+La solution de messagerie est externalisée et l’utilisation de clients lourds n’est pas autorisée pour les raisons de sécurité suivante :
+-	Réduction de la surface d’attaque en limitant la consultation des mails par Webmail (HTTPS)
+-	Les flux n’entrent plus dans le réseau de l’entreprise, l’ensemble reste en dehors.
+-	L’unique présence d’un relai SMTP dans l’infrastructure permet la fonction de scan to mail depuis les copieurs.
+-	Allège la complexité technique d’intégration à la ferme RDS et donc les risques.
+
+Les fonctionnalités suivantes sont attendues :
+-	La solution d’anti-spam qui était existante est déplacé aussi à l’externe.
+-	Les échanges sont chiffrés
+-	Les boites mails sont sauvegardées mensuellement.
+o	De façon hebdomadaire pour les boites mails partagées des services clés (RH)
+2.5	Copieurs
+Les copieurs de l’entreprise sont intégrés dans un VLAN dédié et ont accès à un serveur d’impression.
+Un SMTP dans une DMZ privée permet aux copieurs de proposer la fonction de Scan2Mail vers la messagerie externalisée.
+2.6	Vulnérabilité et mise à jour
+L’outil déjà présent Rapid7 est chargé de la détection de vulnérabilités sur les systèmes.
+Une solution de détection de CVE est présente pour les systèmes mais aussi les applications suivant les politiques suivantes :
+2.6.1	Poste de travail :
+-	Les applications sous CVE critiques sont automatiquement patchées dès que possible
+-	Une politique de patching sur un poste de travail témoin est appliquée afin de vérifier le bon déroulement avant déploiement massif sur l’ensemble du parc.
+-	Des exceptions sont à prévoir pour des contextes particuliers afin de ne pas paralyser certaines activités métiers.
+2.6.2	Serveurs et éléments réseaux :
+-	Les éléments réseaux doivent être mise à jour manuellement à la suite des détections et à l’évaluation des CVE tout en préservant l’activité de l’entreprise.
+-	Les systèmes serveurs doivent être mise à jour après vérification des résultats sur des serveurs de staging, l’objectif est de garantir la disponibilité des activités métiers avant application de la politique.
+-	Protection de type DLP sur les serveurs de fichiers ou tout élément ayant des données cruciales.
+La solution est isolée dans son propre VLAN.
+2.7	Supervision
+Une solution de supervision est intégrée chez Truck Norris de façon externalisée avec un proxy internalisé sur le réseau de l’entreprise dans un but sécuritaire en cas de panne des flux réseaux.
+La mise en place de la surveillance doit privilégier les éléments critiques suivant la matrice de risques de l’entreprise, ainsi les applications métiers sont prioritaires, ainsi que les éléments réseaux, les sauvegardes et les serveurs de fichiers.
+
+La solution de supervision doit communiquer de façon sécurisée avec les éléments surveillés et l’intégrité de la métrologie doit être garantie.
+L’intégration d’un système d’alerte par SMS est en place en cas de coupure des réseaux pour une réaction d’urgence des administrateurs.
+2.8	Accès Wifi
+Les politiques suivantes s’appliquent afin de sécuriser le wifi :
+-	Les accès sont gérés par un contrôleur WIFI utilisant une technologie RADIUS afin d’authentifier l’utilisateur légitime et de profiter de fonctionnalités de type MFA.
+-	L’accès aux flux réseaux est contrôlé par du 802.1x afin de garantir la légitimité et la sécurité du réseau.
+-	La micro-segmentation entre les clients wifi est imposée
+-	Les flux doivent être chiffrés en WPA3 et les protocoles obsolètes doivent être désactivés
+-	Les SSID ne doivent pas être nommé selon leur usage réel afin de diminuer le ciblage malveillant.
+Tous les accès wifi, authentifié ou invités doivent être couvert par notre politique de traçabilité en conservant les logs.
+
+Les éléments se connectant au WIFI sont isolé dans un VLAN GUEST avant authentification de ces derniers, et donc avant d’avoir la possibilité d’accéder à d’autres VLAN.
+Les éléments d’infrastructure du WIFI sont isolés également :
+-	VLAN WIFI pour les bornes et le contrôleur wifi.
+-	Le serveur RADIUS avec les serveurs LDAP, tant de Tiering 0, ils doivent être ensemble.
+Un portail captif est dédié aux utilisateurs invités.
+2.9	Téléphonie
+La sécurité de la téléphonie se découpe en deux catégories :
+2.9.1	Téléphonie interne
+-	Les serveurs et les téléphones sont isolés dans un VLAN dédié de VOIP.
+-	Le protocole SRTP est obligatoire pour sécuriser les flux et leur confidentialité.
+-	La présence d’un SBC en DMZ public permet la communication sécurisée avec l’extérieur.
+-	L’application d’une politique de QoS est cruciale.
+2.9.2	Smartphone
+-	Une solution de gestion centralisée de parc des smartphones est en place (Type MDM/EMM)
+-	Les smartphones des employés bénéficient d’un contrôle des applications présentes et une traçabilité des appels et de leur usage pour des raisons de sécurité.
+2.10	 Site Web
+L’entreprise Truck Norris possède un site web exposé en externe dans un objectif de visibilité.
+L’usage vitrine conditionne la sécurité appliquée :
+-	L’accès par les visiteurs est fait indirectement par des reverse proxy mandataires en DMZ publique afin d’éviter l’exposition directe
+-	Ce dernier est protégé par un certificat SSL, donc par le protocole HTTPS
+-	Le site web est sauvegardé une fois par mois.
+En matière d’intégration, un VLAN est dédié aux serveurs web, et un VLAN est dédié pour les reverse proxy (DMZ publique).
+Enfin le site web est protégé par une technologie WAF portée par le pare-feu Fortinet déjà présent dans l’entreprise.
+2.11	Politique de sauvegarde
+Afin de se prémunir des pertes et de sécuriser l’infrastructure et ses données, la politique de sauvegarde s’axe sur la bonne pratique du 3.2.1.1.0 grâce à plusieurs éléments :
+-	La solution de sauvegarde est présente dans un tiering dédié, et donc dans un vlan dédié.
+-	Les sauvegardes sont chiffrées sur les protocoles sécurisées recommandés par l’ANSSI
+Dans le respect des bonnes pratiques, un dépôt de sauvegarde est présent dans la première salle informatique avec le serveur applicatif, une deuxième copie dans la deuxième salle, et enfin un dernier dépôt est externalisé en ligne, ce dernier est couvert par un principe d’immuabilité.
+
+Des tests d’intégrités des sauvegardes sont planifiés dans un processus annuels pris en charge par les équipes IT, de plus la dernière copie des sauvegardes externalités suit une politique d’immuabilité.
+
+La politique de sauvegarde suit les matrices de risques et les priorités de l’entreprise dans un objectif d’alignement stratégique, par ordre de priorité :
+1.	L’applicatif métiers (progiciels)
+2.	La base de données des gestionnaires de mots de passes
+3.	Le stockage des hyperviseurs
+4.	Les configurations des éléments suivants :
+a.	Hyperviseurs
+b.	Proxy
+c.	Ferme RDS
+d.	Bastion
+e.	Pares-feux
+f.	Téléphonie (IPBX+SBC)
+g.	Switch et bornes wifi
+h.	SMTP Relay
+5.	Les serveurs de fichiers collaboratifs
+6.	Les éléments Tier 0 (AD, PKI, Radius)
+7.	Les boites mails et leur contenu
+
+Il est crucial d’exporter dès que possible les configurations par protocole sécurisé (SFTP/SSH) vers un stockage chiffré, qui lui sera entièrement sauvegardé.
+Les éléments restants figés dans le temps, n’ayant pas de modification fréquentes, sont sauvegardés une fois par mois.
+Pour les activités métiers, il s’agit de sauvegardes journalières (incrémentiels) et complètes en fin de semaine (full)
+Enfin, la politique de sauvegarde est particulièrement sensible sur les applications métiers et les fichiers des collaborateurs avec un RPO de 4h et du versionning.
+
+2.12	Gestion des mots de passe
+La politique de gestion des mots de passe implique le respect obligatoire des recommandations de la CNIL sur leur création, et leur stockage se fait dans un gestionnaire de mot de passe professionnel intégré à l’infrastructure.
+Ce dernier est chiffré et son accès se fait uniquement après authentification du collaborateur en accès web avec certificat SSL.
+
+2.13	Ferme RDS
+En matière de sécurité la ferme RDS est dans un environnement avec un VLAN dédié, cette dernière est clustérisée et son accès est isolé aux collaborateurs internes.
+L’accès est sécurisé par authentification des utilisateurs.
+Les applications infogérés sont accessibles aux prestataires.
+2.14	Bastion interne et externe
+Les accès aux éléments vitaux comme les hyperviseurs ou l’infogérance sont contrôlés par des bastions.
+Ces derniers sont chacun dans leur propre VLAN dédié, et leur accès passe indirectement par des reverse proxy, chaque paire de reverse proxy est dans la DMZ correspondante (DMZ publique pour Bastion externe, DMZ privée pour Bastion interne).
+La traçabilité et les accès sont contrôlés grâce aux bastions.
+3	Formations
+3.1	Collaborateurs
+Les collaborateurs sont formés aux risques cyber notamment sur des sujets comme :
+-	Les risques et les bonnes pratiques à l’utilisation de la messagerie
+-	L’utilisation et la compréhension des fonctions MFA
+-	Leur responsabilité en tant qu’individus avec la charte informatique
+3.2	Administrateurs
+Les administrateurs et ingénieurs sont formés en tant que collaborateurs mais ont en plus d’autres éléments :
+-	Sensibilisation à leur responsabilité en tant qu’administrateur
+-	Cadre légal et moral de l’usage de leur pouvoir dans le cadre de leurs fonctions
+
+4	Documentation
+4.1	Présence documentaire
+Les documents cadrant la sécurité de l’infrastructure présents sont :
+-	Plan de reprise d’activité (PRA)
+-	Plan de continuité d’activité (PCA)
+-	Politique de gestion des accès
+-	Politique de gestion des mots de passe
+-	Charte utilisateur (déjà présent)
+-	PSSI (déjà présente)
+-	Registre des traitements des données à charactère personnel
+-	Politique de gestion des incidents
+-	Politique de gestion des fournisseurs
+-	Politique d’accès pour les prestataires
+-	Gestion des habilitations
+5	Annexe
+5.1	Schéma physique illustrant le DAT
+ 
+
+
+
+5.2	Liste des vlan
+1	Administration
+2	Management
+3	Télésurveillance
+4	Journalisation (Puits de logs)
+5	Copieurs
+6	Supervision
+7	WIFI Infrastructure
+8	WIFI Guest
+9	VoIP
+10	Web
+11	DMZ Publique
+12	DMZ Privée
+13	Sauvegarde
+14	RDS
+15	Bastion Interne
+16	Bastion Externe
+17	Active Directory
+
